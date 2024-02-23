@@ -1,19 +1,16 @@
-#!/usr/bin/python3
-"""Comment"""
-from fabric.api import local
-from datetime import datetime
+#!/usr/bin/env bash
+# Script that sets up your web servers for the deployment of web_static
+sudo apt-get -y update
+sudo apt-get -y install nginx
+sudo service nginx start
 
+sudo mkdir -p /data/web_static/shared/
+sudo mkdir -p /data/web_static/releases/test/
+echo "Holberton School" | sudo tee /data/web_static/releases/test/index.html > /dev/null
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-def do_pack():
-    """Comment again"""
-    local("mkdir -p versions")
+sudo chown -R ubuntu:ubuntu /data/
 
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    archive_path = "versions/web_static_{}.tgz".format(timestamp)
+sudo sed -i '44i \\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}' /etc/nginx/sites-available/default
 
-    result = local("tar -cvzf {} web_static".format(archive_path))
-
-    if result.failed:
-        return None
-    else:
-        return archive_path
+sudo service nginx restart
