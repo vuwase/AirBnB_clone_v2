@@ -1,43 +1,34 @@
 #!/usr/bin/python3
-"""second task"""
-from flask import Flask, render_template
-
+"""Script that starts a Flask web application."""
+from flask import Flask
 
 app = Flask(__name__)
 
 
-@app.route("/", strict_slashes=False)
-def hello_hbnb():
-    """first page"""
+@app.route('/', strict_slashes=False)
+def hello():
     return "Hello HBNB!"
 
 
-@app.route("/hbnb", strict_slashes=False)
-def hbnb():
-    """second page"""
+@app.route('/hbnb', strict_slashes=False)
+def hello_hbnb():
     return "HBNB"
 
 
-@app.route("/c/<text>", strict_slashes=False)
-def C_fun(text):
-    """C page"""
-    text = text.replace('_', ' ')
-    return 'C {}'.format(text)
+@app.route('/c/<text>', strict_slashes=False)
+def hello_c(text):
+    return 'C ' + text.replace('_', ' ')
 
 
-@app.route("/python", strict_slashes=False)
-@app.route("/python/<text>", strict_slashes=False)
-def Python_fun(text="is cool"):
-    """ Python page"""
-
-    text = text.replace('_', ' ')
-    return 'Python {}'.format(text)
+@app.route('/python/', defaults={'text': 'is cool'}, strict_slashes=False)
+@app.route('/python/<text>', strict_slashes=False)
+def python(text):
+    return 'Python ' + text.replace('_', ' ')
 
 
-@app.route("/number/<int:n>", strict_slashes=False)
-def numbers(n):
-    """Number page"""
-    return '{} is a number'.format(n)
+@app.route('/number/<int:n>', strict_slashes=False)
+def number(n):
+    return "{} is a number".format(n)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
